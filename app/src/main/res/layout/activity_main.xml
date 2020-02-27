@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+
+        <TextView
+            android:id="@+id/switch_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="启用儿童监护模式"
+            android:layout_marginTop="30dp"
+            android:textSize="24sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_alignTop="@+id/switch_on"
+            android:layout_alignBottom="@+id/switch_on"
+            android:layout_alignParentEnd="true"
+            android:textOn="已启用"
+            android:textOff="已关闭"/>
+
+        <TextView
+            android:id="@+id/use_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="可持续使用时长(分钟)"
+            android:layout_below="@+id/switch_on"
+            android:layout_marginTop="30dp"
+            android:textSize="24sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+        <Spinner
+            android:id="@+id/time_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/use_time"
+            android:layout_alignBottom="@+id/use_time"
+            android:layout_alignParentEnd="true"
+            android:textSize="24sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/sleep_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="每次休息时长(分钟)"
+            android:layout_below="@+id/use_time"
+            android:layout_marginTop="30dp"
+            android:textSize="24sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+        <Spinner
+            android:id="@+id/sleep_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/sleep_time"
+            android:layout_alignBottom="@+id/sleep_time"
+            android:layout_alignParentEnd="true"
+            android:textSize="24sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/whiteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="白名单时间段"
+            android:layout_below="@+id/sleep_time"
+            android:layout_marginTop="30dp"
+            android:textSize="24sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/whiteRecyclerView"
+            android:layout_below="@+id/whiteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>
