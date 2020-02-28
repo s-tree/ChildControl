@@ -7,6 +7,15 @@ import android.support.annotation.Nullable;
 
 public class BackgroundControlService extends Service {
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
 
     @Nullable
     @Override
