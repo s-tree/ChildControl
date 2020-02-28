@@ -12,6 +12,7 @@ import com.jj.childmodel.R;
 import com.jj.childmodel.bean.WhiteTimeBean;
 import com.jj.childmodel.menuadapter.MenuRecyclerAdapter;
 import com.jj.childmodel.menuadapter.MenuScrollView;
+import com.jj.childmodel.orm.DBManager;
 import com.jj.childmodel.utils.ScreenUtil;
 
 import java.util.List;
@@ -20,10 +21,14 @@ public class MyRecyclerViewAdapter extends MenuRecyclerAdapter {
     private int TYPE_ADD = 0;
     private int TYPE_ITEM = 1;
     private int width = ScreenUtil.getScreenWidth();
+    public View.OnClickListener onClickListener;
+
+    public static final String TAG_DEL = "del";
 
     private List<WhiteTimeBean> timeBeanList;
-    public MyRecyclerViewAdapter(List<WhiteTimeBean> timeBeans){
+    public MyRecyclerViewAdapter(List<WhiteTimeBean> timeBeans, View.OnClickListener onClickListener){
         this.timeBeanList = timeBeans;
+        this.onClickListener = onClickListener;
     }
 
     @Override
@@ -34,10 +39,29 @@ public class MyRecyclerViewAdapter extends MenuRecyclerAdapter {
         return TYPE_ITEM;
     }
 
+    public void addNewData(WhiteTimeBean whiteTimeBean){
+        timeBeanList.add(1,whiteTimeBean);
+        notifyItemInserted(1);
+    }
+
+    public void removeData(int position){
+        DBManager.removeWhiteBean(timeBeanList.get(position));
+        timeBeanList.remove(position);
+        notifyItemRemoved(position);
+    }
+
     @Override
     public BaseMenuRecyclerHolder getContentView(Context context, View scrollView,int viewType) {
         if(viewType == TYPE_ADD){
-            return new EmptyHolder(LayoutInflater.from(scrollView.getContext()).inflate(R.layout.layout_item_add,null,false));
+            View v = LayoutInflater.from(context).inflate(R.layout.layout_item_add,null,false);
+            MenuScrollView _scrollView = (MenuScrollView) scrollView;
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
+                    (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.topMargin = 0;
+            params.bottomMargin = 1;
+            params.width = width;
+            _scrollView.addContent(v,width,0,0,0,0);
+            return new EmptyHolder(scrollView);
         }else{
             View v = LayoutInflater.from(context).inflate(R.layout.layout_white_list_item,null,false);
             MenuScrollView _scrollView = (MenuScrollView) scrollView;
@@ -57,8 +81,8 @@ public class MyRecyclerViewAdapter extends MenuRecyclerAdapter {
             return;
         }
         ItemHolder itemHolder = (ItemHolder) baseMenuRecyclerHolder;
-        itemHolder.timerStart.setText("11:11");
-        itemHolder.timerEnd.setText("22:22");
+        itemHolder.timerStart.setText(timeBeanList.get(i).startTime);
+        itemHolder.timerEnd.setText(timeBeanList.get(i).endTime);
         itemHolder.bindMyView(i);
         itemHolder.setPosition(i);
     }
@@ -75,7 +99,7 @@ public class MyRecyclerViewAdapter extends MenuRecyclerAdapter {
             super(itemView);
             timerStart = itemView.findViewById(R.id.timerStart);
             timerEnd = itemView.findViewById(R.id.timerEnd);
-            addView("删除", "del",onClickListener);
+            addView("删除", TAG_DEL,onClickListener);
         }
     }
 

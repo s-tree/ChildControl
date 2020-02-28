@@ -19,4 +19,8 @@ public class DBManager {
     public static void addWhiteBean(WhiteTimeBean whiteTimeBean){
         whiteTimeBean.id = liteOrm.save(whiteTimeBean);
     }
+
+    public static void removeWhiteBean(WhiteTimeBean whiteTimeBean){
+        liteOrm.delete(whiteTimeBean);
+    }
 }
