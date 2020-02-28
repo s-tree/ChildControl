@@ -8,7 +8,9 @@ public class WhiteTimeBean {
     @PrimaryKey(AssignType.AUTO_INCREMENT)
     public long id;
 
-    public String startTime;
+    public int startHour = -1;
+    public int startMinute = -1;
 
-    public String endTime;
+    public int endHour = -1;
+    public int endMinute = -1;
 }

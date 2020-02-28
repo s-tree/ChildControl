@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements MenuRecyclerAdapt
         sleep_spinner.setSelection(sleepList.indexOf(String.valueOf(SPUtil.getSleepTime())));
 
         List<WhiteTimeBean> timeBeans = DBManager.getWhitelistBeans();
+        timeBeans.add(0,new WhiteTimeBean());
 
         whiteRecyclerView = findViewById(R.id.whiteRecyclerView);
         whiteRecyclerView.setHasFixedSize(true);
@@ -153,9 +154,9 @@ public class MainActivity extends AppCompatActivity implements MenuRecyclerAdapt
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-        String time = hour + ":" + minute;
-        if(TextUtils.isEmpty(whiteTimeBean.startTime)){
-            whiteTimeBean.startTime = time;
+        if(whiteTimeBean.startHour == -1){
+            whiteTimeBean.startHour = hour;
+            whiteTimeBean.startMinute = minute;
             Observable.timer(200, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<Long>() {
@@ -165,7 +166,8 @@ public class MainActivity extends AppCompatActivity implements MenuRecyclerAdapt
                         }
                     });
         }else{
-            whiteTimeBean.endTime = time;
+            whiteTimeBean.endHour = hour;
+            whiteTimeBean.endMinute = minute;
             DBManager.addWhiteBean(whiteTimeBean);
             whiteAdapter.addNewData(whiteTimeBean);
         }

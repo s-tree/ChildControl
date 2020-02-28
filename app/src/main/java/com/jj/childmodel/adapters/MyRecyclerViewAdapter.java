@@ -2,6 +2,7 @@ package com.jj.childmodel.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.jj.childmodel.menuadapter.MenuRecyclerAdapter;
 import com.jj.childmodel.menuadapter.MenuScrollView;
 import com.jj.childmodel.orm.DBManager;
 import com.jj.childmodel.utils.ScreenUtil;
+import com.jj.childmodel.utils.TimeUtil;
 
 import java.util.List;
 
@@ -41,17 +43,20 @@ public class MyRecyclerViewAdapter extends MenuRecyclerAdapter {
 
     public void addNewData(WhiteTimeBean whiteTimeBean){
         timeBeanList.add(1,whiteTimeBean);
-        notifyItemInserted(1);
+//        notifyItemInserted(1);
+        notifyDataSetChanged();
     }
 
     public void removeData(int position){
         DBManager.removeWhiteBean(timeBeanList.get(position));
         timeBeanList.remove(position);
-        notifyItemRemoved(position);
+//        notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     @Override
     public BaseMenuRecyclerHolder getContentView(Context context, View scrollView,int viewType) {
+        Log.w("test_bug","getContentView width = " + width);
         if(viewType == TYPE_ADD){
             View v = LayoutInflater.from(context).inflate(R.layout.layout_item_add,null,false);
             MenuScrollView _scrollView = (MenuScrollView) scrollView;
@@ -80,9 +85,10 @@ public class MyRecyclerViewAdapter extends MenuRecyclerAdapter {
         if(baseMenuRecyclerHolder instanceof EmptyHolder){
             return;
         }
+        WhiteTimeBean timeBean = timeBeanList.get(i);
         ItemHolder itemHolder = (ItemHolder) baseMenuRecyclerHolder;
-        itemHolder.timerStart.setText(timeBeanList.get(i).startTime);
-        itemHolder.timerEnd.setText(timeBeanList.get(i).endTime);
+        itemHolder.timerStart.setText(TimeUtil.getTimeString(timeBean.startHour,timeBean.startMinute));
+        itemHolder.timerEnd.setText(TimeUtil.getTimeString(timeBean.endHour,timeBean.endMinute));
         itemHolder.bindMyView(i);
         itemHolder.setPosition(i);
     }
