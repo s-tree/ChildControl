@@ -6,8 +6,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.jj.childmodel.ChildApplication;
-import com.jj.childmodel.DreamActivity;
 import com.jj.childmodel.bean.WhiteTimeBean;
+import com.jj.childmodel.dialog.LockDialog;
 import com.jj.childmodel.orm.DBManager;
 import com.jj.childmodel.utils.NotificationUtil;
 import com.jj.childmodel.utils.SPUtil;
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -46,7 +47,8 @@ public class BackgroundControlService extends Service {
         if(disposable != null && !disposable.isDisposed()){
             return;
         }
-        disposable = Observable.interval(1, TimeUnit.MINUTES)
+//        disposable = Observable.interval(1, TimeUnit.MINUTES)
+        disposable = Observable.interval(10, TimeUnit.SECONDS)
                 .map(new Function<Long, Boolean>() {
                     @Override
                     public Boolean apply(Long aLong) throws Exception {
@@ -66,13 +68,16 @@ public class BackgroundControlService extends Service {
                         return false;
                     }
                 })
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) throws Exception {
                         if(aBoolean){
                             return;
                         }
-                        DreamActivity.startDreamActivity();
+                        LockDialog.showDialog();
+//                        DreamActivity.startDreamActivity();
+//                        new LockDialog(ChildApplication.instance).show();
                     }
                 });
     }
@@ -91,6 +96,8 @@ public class BackgroundControlService extends Service {
     }
 
     private boolean checkKeepTime(){
-        return ChildApplication.keepedMinutes < SPUtil.getKeepTime();
+//        return ChildApplication.keepedMinutes < SPUtil.getKeepTime();
+//        return ChildApplication.keepedMinutes < SPUtil.getKeepTime();
+        return false;
     }
 }

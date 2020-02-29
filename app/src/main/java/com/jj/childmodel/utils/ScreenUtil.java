@@ -7,4 +7,8 @@ public class ScreenUtil {
     public static int getScreenWidth(){
         return ChildApplication.instance.getResources().getDisplayMetrics().widthPixels;
     }
+
+    public static int getScreenHeight(){
+        return ChildApplication.instance.getResources().getDisplayMetrics().heightPixels;
+    }
 }
