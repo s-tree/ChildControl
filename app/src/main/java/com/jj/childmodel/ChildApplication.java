@@ -12,13 +12,17 @@ import java.util.LinkedList;
 public class ChildApplication extends Application implements Application.ActivityLifecycleCallbacks{
     public static Application instance;
     public static long keepedMinutes = 0;
+    public static boolean isForground = false;
     public LinkedList<Activity> activities;
+    public LinkedList<Activity> foregroundActivities;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
         activities = new LinkedList<>();
+        foregroundActivities = new LinkedList<>();
+        registerActivityLifecycleCallbacks(this);
         startService(new Intent(this, BackgroundControlService.class));
     }
 
@@ -34,12 +38,15 @@ public class ChildApplication extends Application implements Application.Activit
 
     @Override
     public void onActivityResumed(Activity activity) {
-
+        foregroundActivities.add(activity);
+        keepedMinutes = 0;
+        isForground = true;
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-
+        foregroundActivities.remove(activity);
+        isForground = false;
     }
 
     @Override
@@ -56,4 +63,5 @@ public class ChildApplication extends Application implements Application.Activit
     public void onActivityDestroyed(Activity activity) {
         activities.remove(activity);
     }
+
 }

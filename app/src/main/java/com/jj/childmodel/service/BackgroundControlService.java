@@ -50,6 +50,10 @@ public class BackgroundControlService extends Service {
                 .map(new Function<Long, Boolean>() {
                     @Override
                     public Boolean apply(Long aLong) throws Exception {
+                        if(ChildApplication.isForground){
+                            return true;
+                        }
+                        ChildApplication.keepedMinutes ++;
                         if(!SPUtil.isEnable()){
                             return true;
                         }
