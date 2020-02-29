@@ -20,6 +20,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DreamActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTask">
+        </activity>
+        <service android:name=".service.BackgroundControlService"/>
     </application>
 
 </manifest>
