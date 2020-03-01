@@ -57,4 +57,28 @@ public class TimeUtil {
             return true;
         }
     }
+
+    private static final StringBuilder timeStr = new StringBuilder();
+    public static String formatTime(long time) {
+        if (!TextUtils.isEmpty(timeStr.toString())) {
+            timeStr.replace(0, timeStr.length(), "");
+        }
+        time /= 1000;
+        if (time <= 0) {
+            return "00:01";
+        }
+        long minute = time / 60;
+        if (minute < 10) {
+            timeStr.append("0");
+        }
+        timeStr.append(minute);
+        timeStr.append(":");
+        long second = time - (minute * 60);
+
+        if (second < 10) {
+            timeStr.append("0");
+        }
+        timeStr.append(second);
+        return timeStr.toString();
+    }
 }

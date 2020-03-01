@@ -5,21 +5,45 @@
     android:id="@+id/rootLayout"
     android:background="@android:color/black">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true"
-        android:background="@android:color/black">
+    <RelativeLayout
+        android:id="@+id/bgView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextClock
-            android:id="@+id/textClock"
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:background="@android:color/black">
+
+            <TextClock
+                android:id="@+id/textClock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:textColor="@android:color/white"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:text="请让眼睛休息一下吧"
+                android:textColor="@android:color/white"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="32sp"
+            android:layout_below="@+id/linear"
+            android:layout_marginTop="30dp"
             android:textColor="@android:color/white"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

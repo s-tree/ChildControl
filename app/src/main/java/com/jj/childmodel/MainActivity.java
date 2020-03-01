@@ -1,6 +1,8 @@
 package com.jj.childmodel;
 
+import android.Manifest;
 import android.app.TimePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +19,7 @@ import android.widget.TimePicker;
 import com.jj.childmodel.adapters.MyRecyclerViewAdapter;
 import com.jj.childmodel.adapters.MySpinnerAdapter;
 import com.jj.childmodel.bean.WhiteTimeBean;
+import com.jj.childmodel.dialog.LockDialog;
 import com.jj.childmodel.menuadapter.MenuRecyclerAdapter;
 import com.jj.childmodel.orm.DBManager;
 import com.jj.childmodel.utils.SPUtil;
@@ -30,6 +33,8 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.helper.PermissionHelper;
 
 public class MainActivity extends AppCompatActivity implements MenuRecyclerAdapter.OnMenuItemClick,CompoundButton.OnCheckedChangeListener,
         View.OnClickListener,TimePickerDialog.OnTimeSetListener{
@@ -108,6 +113,22 @@ public class MainActivity extends AppCompatActivity implements MenuRecyclerAdapt
         whiteAdapter = new MyRecyclerViewAdapter(timeBeans,this);
         whiteRecyclerView.setAdapter(whiteAdapter);
         whiteAdapter.setOnMenuItemClick(this);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            String[] permissions = new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW};
+            if (!EasyPermissions.hasPermissions(this, permissions)) {
+//                PermissionHelper.newInstance(this).directRequestPermissions(
+//                        0x11, permissions);
+                EasyPermissions.requestPermissions(this, "请同意悬浮窗权限",
+                        0x11, permissions);
+            }
+        }
     }
 
     @Override

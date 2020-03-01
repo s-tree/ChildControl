@@ -3,17 +3,22 @@ package com.jj.childmodel.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextClock;
+import android.widget.TextView;
 
 import com.jj.childmodel.ChildApplication;
 import com.jj.childmodel.R;
+import com.jj.childmodel.utils.SPUtil;
 import com.jj.childmodel.utils.ScreenUtil;
+import com.jj.childmodel.utils.TimeUtil;
 
 public class LockDialog extends Dialog {
     private static LockDialog instance;
@@ -27,8 +32,9 @@ public class LockDialog extends Dialog {
         instance.show();
     }
 
-    private View blackView;
+    private View blackView,bgView;
     private TextClock textClock;
+    private TextView time;
 
     public LockDialog(@NonNull Context context) {
         super(context);
@@ -36,11 +42,13 @@ public class LockDialog extends Dialog {
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.width = ScreenUtil.getScreenWidth();
-        params.height = ScreenUtil.getScreenHeight();
 
-        setContentView(R.layout.layout_activity_dream);
+        View v = LayoutInflater.from(ChildApplication.instance).inflate(R.layout.layout_activity_dream,null);
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
+        layoutParams.width = ScreenUtil.getScreenWidth();
+        layoutParams.height = ScreenUtil.getScreenHeight();
+        setContentView(v,layoutParams);
+        setTitle("");
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
@@ -52,6 +60,8 @@ public class LockDialog extends Dialog {
         setCanceledOnTouchOutside(false);
 
         blackView = findViewById(R.id.rootLayout);
+        bgView = findViewById(R.id.bgView);
+        time = findViewById(R.id.time);
         textClock = findViewById(R.id.textClock);
         textClock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +71,14 @@ public class LockDialog extends Dialog {
             }
         });
 
+    }
+
+    @Override
+    public void show() {
+        super.show();
         showAni();
+        MyCusTimer myCusTimer = new MyCusTimer(SPUtil.getSleepTime() * 60 * 1000,1000);
+        myCusTimer.start();
     }
 
     private void showAni(){
@@ -84,5 +101,23 @@ public class LockDialog extends Dialog {
             }
         });
         blackView.startAnimation(animation);
+    }
+
+    class MyCusTimer extends CountDownTimer {
+
+        private MyCusTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            time.setText(TimeUtil.formatTime(millisUntilFinished));
+        }
+
+        @Override
+        public void onFinish() {
+            this.cancel();
+            dismiss();
+        }
     }
 }
